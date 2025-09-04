@@ -1,0 +1,10 @@
+.button-list {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+}
+
+.button-list li {
+    display: flex; /* ensures buttons align neatly */
+}
