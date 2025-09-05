@@ -27,6 +27,7 @@
             <span style="color: @(server.IsOnline ? "green" : "red")">
                 @(server.IsOnline ? "online" : "offline")
             </span>
+            <a href="/servers/edit/@server.Id" class="btn btn-link">Edit</a>
         </li>
     }
 </ul>
