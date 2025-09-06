@@ -1,9 +1,69 @@
 @page "/servers/edit/{id:int}"
-<h3>AddServer</h3>
+@using System.Dynamic
+<h3>Edit Server</h3>
 <br/>
-@Id
+
+@if (_server is null)
+{
+    return;
+}
+
+<EditForm Model="_server" FormName="formServer" OnSubmit="Submit">
+    <div class="row mb-3">
+        <InputNumber hidden="true" @bind-Value="@_server.Id"></InputNumber>
+        <div class="col-2">
+            <label class="col-form-label">
+                Name
+            </label>
+        </div>
+        <div class="col-6">
+            <InputText class="form-control" @bind-Value="_server.Name"></InputText>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label">
+                City
+            </label>
+        </div>
+        <div class="col-6">
+            <InputText class="form-control" @bind-Value="_server.City"></InputText>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label">
+                Online
+            </label>
+        </div>
+        <div class="col-6">
+            <InputCheckbox class="form-check-input" @bind-Value="_server.IsOnline"></InputCheckbox>
+        </div>
+    </div>
+    <br/>
+    <button class="btn btn-primary" type="submit">Update</button>
+    <a href="/servers" class="btn btn-primary ">Go Back</a>
+</EditForm>
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    [SupplyParameterFromForm(FormName = "formServer")]
+    private Server? _server { get; set; }
+
+    private void Submit()
+    {
+        if (_server is null)
+        {
+            return;
+        }
+        
+        ServersRepository.UpdateServer(_server.Id, _server);
+    }
+
+    protected override void OnParametersSet()
+    {
+        _server ??= ServersRepository.GetServerById(Id);
+    }
+
 }
