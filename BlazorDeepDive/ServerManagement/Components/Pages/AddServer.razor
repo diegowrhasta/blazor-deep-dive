@@ -1,14 +1,7 @@
-@page "/servers/edit/{id:int}"
+@page "/servers/add/{city}"
 
-@inject NavigationManager NavigationManager
-
-<h3>Edit Server</h3>
-<br/>
-
-@if (_server is null)
-{
-    return;
-}
+<h3>AddServer</h3>
+<br />
 
 <EditForm Model="_server" FormName="formServer" OnValidSubmit="Submit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
@@ -60,25 +53,18 @@
 </EditForm>
 
 @code {
-    [Parameter] public int Id { get; set; }
+    [Parameter]
+    public string City { get; set; } = string.Empty;
 
-    [SupplyParameterFromForm(FormName = "formServer")]
-    private Server? _server { get; set; }
-
-    private void Submit()
-    {
-        if (_server is null)
-        {
-            return;
-        }
-
-        ServersRepository.UpdateServer(_server.Id, _server);
-        NavigationManager.NavigateTo("/servers");
-    }
+    private Server _server { get; set; } = new();
 
     protected override void OnParametersSet()
     {
-        _server ??= ServersRepository.GetServerById(Id);
+        _server.City = City;
     }
 
+    private void Submit()
+    {
+        ServersRepository.AddServer(_server);
+    }
 }

@@ -1,4 +1,5 @@
 @page "/servers"
+@inject NavigationManager NavigationManager
 
 <h3>Servers</h3>
 <br/>
@@ -11,7 +12,7 @@
                 <div class="card">
                     <img class="card-img-top" src="@($"/images/{city}.png")" alt="Card image cap">
                     <div class="card-body">
-                        <button type="button" class="btn btn-primary">@city</button>
+                        <button type="button" class="btn btn-primary" @onclick="() => Add(city)">@city</button>
                     </div>
                 </div>
             </div>
@@ -35,4 +36,9 @@
 @code {
     private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
     private List<string> cities = CitiesRepository.Cities;
+
+    private void Add(string city)
+    {
+        NavigationManager.NavigateTo($"/servers/add/{city}");
+    }
 }
