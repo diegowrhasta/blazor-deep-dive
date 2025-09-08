@@ -12,7 +12,7 @@
                 <div class="card">
                     <img class="card-img-top" src="@($"/images/{city}.png")" alt="Card image cap">
                     <div class="card-body">
-                        <button type="button" class="btn btn-primary" @onclick="() => Add(city)">@city</button>
+                        <button type="button" class="btn btn-primary">@city</button>
                     </div>
                 </div>
             </div>
@@ -29,16 +29,33 @@
                 @(server.IsOnline ? "online" : "offline")
             </span>
             <a href="/servers/edit/@server.Id" class="btn btn-link">Edit</a>
+            <EditForm
+                Model="server"
+                FormName="@($"server-{server.Id}-form")"
+                OnValidSubmit="@(() => DeleteServer(server))">
+                <button type="submit" class="btn btn-primary">
+                    Delete
+                </button>
+            </EditForm>
         </li>
     }
 </ul>
+<a href="/servers/add" class="btn btn-primary">Add Server</a>
 
 @code {
     private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
     private List<string> cities = CitiesRepository.Cities;
 
-    private void Add(string city)
+    private void DeleteServer(Server server)
     {
-        NavigationManager.NavigateTo($"/servers/add/{city}");
+        if (server.Id <= 0)
+        {
+            return;
+        }
+
+        ServersRepository.DeleteServer(server.Id);
+        // servers = ServersRepository.GetServersByCity("Toronto");
+        NavigationManager.Refresh();
     }
+
 }
