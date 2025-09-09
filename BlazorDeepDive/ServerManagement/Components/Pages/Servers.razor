@@ -10,7 +10,7 @@
         {
             <div class="col">
                 <div class="card">
-                    <img class="card-img-top" src="@($"/images/{city}.png")" alt="Card image cap">
+                    <img style="max-width: 150px; max-height: 150px" class="card-img-top" src="@($"/images/{city}.png")" alt="Card image cap">
                     <div class="card-body">
                         <button type="button" class="btn btn-primary">@city</button>
                     </div>
@@ -20,6 +20,9 @@
     </div>
 </div>
 <br/>
+<p>
+    <ServerComponent></ServerComponent>
+</p>
 <ul>
     @foreach (var server in servers)
     {
