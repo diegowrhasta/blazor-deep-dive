@@ -3,24 +3,22 @@
     return;
 }
 
-<EditForm Enhance Model="server" FormName="serverComponentForm" OnSubmit="ChangeServerStatus">
-    <InputNumber @bind-Value="server.Id" hidden></InputNumber>
-    <InputText @bind-Value="server.City" hidden></InputText>
-    <InputText @bind-Value="server.Name" hidden></InputText>
-    <InputCheckbox @bind-Value="server.IsOnline" hidden></InputCheckbox>
-
-    <div style="@($"color: {(server.IsOnline ? "green" : "red")}")" data-name="@server.Name"
-         data-status="@(server.IsOnline ? "online" : "offline")">
-        @server.Name is in @server.City that is @(server.IsOnline ? "online" : "offline")
-        <button type="submit" class="btn btn-primary">Turn On/Off</button>
-    </div>
-</EditForm>
+<div style="@($"color: {(server.IsOnline ? "green" : "red")}")" data-name="@server.Name"
+     data-status="@(server.IsOnline ? "online" : "offline")">
+    @server.Name is in @server.City that is @(server.IsOnline ? "online" : "offline")
+    <button type="button" class="btn btn-primary" @onclick="ChangeStatus">Turn On/Off</button>
+</div>
 
 @code {
 
-    [SupplyParameterFromForm] private Server? server { get; set; }
+    [SupplyParameterFromForm]
+    private Server? server { get; set; } = new()
+    {
+        Name = "Server1",
+        City = "Toronto"
+    };
 
-    private void ChangeServerStatus()
+    private void ChangeStatus()
     {
         if (server is null)
         {
@@ -29,14 +27,4 @@
 
         server.IsOnline = !server.IsOnline;
     }
-
-    protected override void OnParametersSet()
-    {
-        server ??= new Server
-        {
-            Name = "Server1",
-            City = "Toronto"
-        };
-    }
-
 }
