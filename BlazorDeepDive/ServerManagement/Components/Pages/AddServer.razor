@@ -1,13 +1,11 @@
 @page "/servers/add"
 
-@attribute [ExcludeFromInteractiveRouting]
-
 @inject NavigationManager NavigationManager
 
 <h3>AddServer</h3>
 <br/>
 
-<EditForm Model="_server" FormName="formServer" OnValidSubmit="Submit">
+<EditForm Model="_server" OnValidSubmit="Submit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <ValidationSummary></ValidationSummary>
 
@@ -56,7 +54,6 @@
 </EditForm>
 
 @code {
-    [SupplyParameterFromForm]
     private Server _server { get; set; } = new() { IsOnline = false };
 
     private void Submit()

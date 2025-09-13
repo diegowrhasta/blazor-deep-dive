@@ -25,6 +25,17 @@
     </div>
 </div>
 <br/>
+
+<div class="input-group mb-3">
+    <input
+        type="text" class="form-control"
+        placeholder="Search Servers"
+        @bind-value="serverFilter"
+        @bind-value:event="oninput">
+    <button class="btn btn-outline-secondary" type="button" id="search-button" @onclick="HandleSearch">Search</button>
+</div>
+<br/>
+
 <ul>
     @foreach (var server in servers)
     {
@@ -52,6 +63,19 @@
     private List<string> cities = CitiesRepository.Cities;
     private string selectedCity = "Toronto";
 
+    private string _serverFilter = string.Empty;
+
+    private string serverFilter
+    {
+        get => _serverFilter;
+        set
+        {
+            // Logic before or after
+            _serverFilter = value;
+            servers = ServersRepository.SearchServers(serverFilter);
+        }
+    }
+
     private void DeleteServer(Server server)
     {
         if (server.Id <= 0)
@@ -72,5 +96,10 @@
 
     private static string IsActive(string currentCity, string cityName) =>
         currentCity.Equals(cityName, StringComparison.InvariantCultureIgnoreCase) ? " border-primary" : string.Empty;
+
+    private void HandleSearch()
+    {
+        selectedCity = string.Empty;
+    }
 
 }
