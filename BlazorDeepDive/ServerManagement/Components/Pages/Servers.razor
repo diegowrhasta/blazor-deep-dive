@@ -10,11 +10,14 @@
         @foreach (var city in cities)
         {
             <div class="col">
-                <div class="card">
-                    <img style="max-width: 150px; max-height: 150px" class="card-img-top" src="@($"/images/{city}.png")"
+                <div class="@($"card{IsActive(selectedCity, city)}")">
+                    <img style="max-width: 150px; max-height: 150px"
+                         class="card-img-top"
+                         src="@($"/images/{city}.png")"
                          alt="Card image cap">
                     <div class="card-body">
-                        <button type="button" class="btn btn-primary">@city</button>
+                        <button type="button" class="btn btn-primary"
+                                @onclick="@(() => SelectCity(city))">@city</button>
                     </div>
                 </div>
             </div>
@@ -22,7 +25,6 @@
     </div>
 </div>
 <br/>
-<ServerComponent></ServerComponent>
 <ul>
     @foreach (var server in servers)
     {
@@ -48,6 +50,7 @@
 @code {
     private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
     private List<string> cities = CitiesRepository.Cities;
+    private string selectedCity = "Toronto";
 
     private void DeleteServer(Server server)
     {
@@ -60,5 +63,14 @@
         // servers = ServersRepository.GetServersByCity("Toronto");
         NavigationManager.Refresh();
     }
+
+    private void SelectCity(string cityName)
+    {
+        selectedCity = cityName;
+        servers = ServersRepository.GetServersByCity(cityName);
+    }
+
+    private static string IsActive(string currentCity, string cityName) =>
+        currentCity.Equals(cityName, StringComparison.InvariantCultureIgnoreCase) ? " border-primary" : string.Empty;
 
 }
