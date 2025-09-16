@@ -18,8 +18,17 @@
                     <input @bind-value="item.IsComplete" class="form-check-input mt-0" type="checkbox"
                            aria-label="Checkbox for following text input">
                 </div>
-                <input @bind-value="item.Text" placeholder="@(CalculatePlaceholder(item.FreshAdd))" type="text"
+                <input @bind-value="item.Text" disabled="@item.IsComplete"
+                       placeholder="@(CalculatePlaceholder(item.FreshAdd))" type="text"
                        class="form-control" aria-label="Text input with checkbox">
+                @if (item.IsComplete)
+                {
+                    <div class="p-2">
+                        <text>
+                            Completed Date: @($"{item.CompletedDate:D}")
+                        </text>
+                    </div>
+                }
             </div>
         </li>
     }

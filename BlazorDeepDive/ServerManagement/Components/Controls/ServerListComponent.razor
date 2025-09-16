@@ -1,0 +1,37 @@
+@inject NavigationManager NavigationManager
+
+<ul>
+    <Virtualize Items="servers" Context="server">
+        <li @key="server.Id">
+            @server.Name in @server.City is
+            <span style="color: @(server.IsOnline ? "green" : "red")">
+                @(server.IsOnline ? "online" : "offline")
+            </span>
+            <a href="/servers/edit/@server.Id" class="btn btn-link">Edit</a>
+            <EditForm
+                Model="server"
+                FormName="@($"server-{server.Id}-form")"
+                OnValidSubmit="@(() => DeleteServer(server))">
+                <button type="submit" class="btn btn-primary">
+                    Delete
+                </button>
+            </EditForm>
+        </li>
+    </Virtualize>
+</ul>
+
+@code {
+    private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
+    
+    private void DeleteServer(Server server)
+    {
+        if (server.Id <= 0)
+        {
+            return;
+        }
+
+        ServersRepository.DeleteServer(server.Id);
+        // servers = ServersRepository.GetServersByCity("Toronto");
+        NavigationManager.Refresh(forceReload: true);
+    }
+}

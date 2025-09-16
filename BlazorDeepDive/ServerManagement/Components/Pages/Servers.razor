@@ -36,29 +36,11 @@
 </div>
 <br/>
 
-<ul>
-    <Virtualize Items="servers" Context="server">
-        <li @key="server.Id">
-            @server.Name in @server.City is
-            <span style="color: @(server.IsOnline ? "green" : "red")">
-                @(server.IsOnline ? "online" : "offline")
-            </span>
-            <a href="/servers/edit/@server.Id" class="btn btn-link">Edit</a>
-            <EditForm
-                Model="server"
-                FormName="@($"server-{server.Id}-form")"
-                OnValidSubmit="@(() => DeleteServer(server))">
-                <button type="submit" class="btn btn-primary">
-                    Delete
-                </button>
-            </EditForm>
-        </li>
-    </Virtualize>
-</ul>
+<ServerListComponent></ServerListComponent>
+
 <a href="/servers/add" class="btn btn-primary">Add Server</a>
 
 @code {
-    private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
     private List<string> cities = CitiesRepository.Cities;
     private string selectedCity = "Toronto";
 
@@ -71,26 +53,14 @@
         {
             // Logic before or after
             _serverFilter = value;
-            servers = ServersRepository.SearchServers(serverFilter);
+            // servers = ServersRepository.SearchServers(serverFilter);
         }
-    }
-
-    private void DeleteServer(Server server)
-    {
-        if (server.Id <= 0)
-        {
-            return;
-        }
-
-        ServersRepository.DeleteServer(server.Id);
-        // servers = ServersRepository.GetServersByCity("Toronto");
-        NavigationManager.Refresh();
     }
 
     private void SelectCity(string cityName)
     {
         selectedCity = cityName;
-        servers = ServersRepository.GetServersByCity(cityName);
+        // servers = ServersRepository.GetServersByCity(cityName);
     }
 
     private static string IsActive(string currentCity, string cityName) =>
