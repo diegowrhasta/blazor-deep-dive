@@ -1,0 +1,44 @@
+@page "/to-do"
+
+@if (!_todoItems.Any())
+{
+    return;
+}
+
+<button @onclick="AddTodo" class="btn btn-primary mb-3">
+    Add Task
+</button>
+
+<ul class="todo-list">
+    @foreach (var item in _todoItems)
+    {
+        <li @key="item.Id">
+            <div class="input-group mb-3">
+                <div class="input-group-text">
+                    <input @bind-value="item.IsComplete" class="form-check-input mt-0" type="checkbox"
+                           aria-label="Checkbox for following text input">
+                </div>
+                <input @bind-value="item.Text" placeholder="@(CalculatePlaceholder(item.FreshAdd))" type="text"
+                       class="form-control" aria-label="Text input with checkbox">
+            </div>
+        </li>
+    }
+</ul>
+
+@code {
+    private readonly string FRESH_ADD = "What do you want to do?";
+    private IEnumerable<TodoItem> _todoItems = TodoItemsRepository.GetItems();
+
+    private string CalculatePlaceholder(bool freshAdd) => freshAdd
+        ? FRESH_ADD
+        : string.Empty;
+
+    private void AddTodo()
+    {
+        TodoItemsRepository.Add(new TodoItem
+        {
+            FreshAdd = true,
+        });
+    }
+
+}
