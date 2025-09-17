@@ -36,7 +36,7 @@
 </div>
 <br/>
 
-<ServerListComponent></ServerListComponent>
+<ServerListComponent CityName="@selectedCity"></ServerListComponent>
 
 <a href="/servers/add" class="btn btn-primary">Add Server</a>
 
@@ -60,7 +60,6 @@
     private void SelectCity(string cityName)
     {
         selectedCity = cityName;
-        // servers = ServersRepository.GetServersByCity(cityName);
     }
 
     private static string IsActive(string currentCity, string cityName) =>
