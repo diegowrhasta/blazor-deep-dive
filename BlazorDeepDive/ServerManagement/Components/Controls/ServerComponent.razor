@@ -25,14 +25,14 @@
     [Parameter]
     public Server? Server { get; set; }
     
-    private void DeleteServer(Server Server)
+    private void DeleteServer(Server server)
     {
-        if (Server.Id <= 0)
+        if (server.Id <= 0)
         {
             return;
         }
 
-        ServersRepository.DeleteServer(Server.Id);
+        ServersRepository.DeleteServer(server.Id);
         // Servers = ServersRepository.GetServersByCity("Toronto");
         NavigationManager.Refresh(forceReload: true);
     }

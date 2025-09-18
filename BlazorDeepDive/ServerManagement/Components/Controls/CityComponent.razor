@@ -1,0 +1,28 @@
+<div class="col">
+    <div class="@($"card{IsActive(SelectedCity, City)}")">
+        <img style="max-width: 150px; max-height: 150px"
+             class="card-img-top"
+             src="@($"/images/{City}.png")"
+             alt="Card image cap">
+        <div class="card-body">
+            <button type="button" class="btn btn-primary"
+                    @onclick="@(async () => await SelectCityAsync(City))">@City</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string SelectedCity { get; set; } = string.Empty;
+    [Parameter] public string City { get; set; } = string.Empty;
+
+    [Parameter] public EventCallback<string> SelectCityCallback { get; set; }
+
+    private async Task SelectCityAsync(string city)
+    {
+        await SelectCityCallback.InvokeAsync(city);
+    }
+
+    private static string IsActive(string currentCity, string cityName) =>
+        currentCity.Equals(cityName, StringComparison.InvariantCultureIgnoreCase) ? " border-primary" : string.Empty;
+
+}

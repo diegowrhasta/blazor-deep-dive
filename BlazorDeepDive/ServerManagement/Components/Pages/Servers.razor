@@ -1,73 +1,31 @@
 @page "/servers"
 
-@inject NavigationManager NavigationManager
-
 <h3>Servers</h3>
 <br/>
 <br/>
-<div class="container-fluid text-center">
-    <div class="row w-50">
-        @foreach (var city in cities)
-        {
-            <div class="col">
-                <div class="@($"card{IsActive(selectedCity, city)}")">
-                    <img style="max-width: 150px; max-height: 150px"
-                         class="card-img-top"
-                         src="@($"/images/{city}.png")"
-                         alt="Card image cap">
-                    <div class="card-body">
-                        <button type="button" class="btn btn-primary"
-                                @onclick="@(() => SelectCity(city))">@city</button>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-</div>
+<CityListComponent SelectCityCallback="HandleSelectedCity"></CityListComponent>
 <br/>
 
-<div class="input-group mb-3">
-    <input
-        type="text" class="form-control"
-        placeholder="Search Servers"
-        @bind-value="serverFilter"
-        @bind-value:event="oninput">
-    <button class="btn btn-outline-secondary" type="button" id="search-button" @onclick="HandleSearch">Search</button>
-</div>
+<SearchBarComponent OnSearchCallback="HandleSearch"></SearchBarComponent>
 <br/>
 
-<ServerListComponent CityName="@selectedCity"></ServerListComponent>
+<ServerListComponent CityName="@CityName" SearchCity="@SearchName"></ServerListComponent>
 
 <a href="/servers/add" class="btn btn-primary">Add Server</a>
 
 @code {
-    private List<string> cities = CitiesRepository.Cities;
-    private string selectedCity = "Toronto";
+    
+    private string CityName { get; set; } = "Toronto";
+    private string SearchName { get; set; } = string.Empty;
 
-    private string _serverFilter = string.Empty;
-
-    private string serverFilter
+    private void HandleSelectedCity(string cityName)
     {
-        get => _serverFilter;
-        set
-        {
-            // Logic before or after
-            _serverFilter = value;
-            // servers = ServersRepository.SearchServers(serverFilter);
-        }
+        CityName = cityName;
     }
 
-    private void SelectCity(string cityName)
+    private void HandleSearch(string searchName)
     {
-        selectedCity = cityName;
+        CityName = string.Empty;
+        SearchName = searchName;
     }
-
-    private static string IsActive(string currentCity, string cityName) =>
-        currentCity.Equals(cityName, StringComparison.InvariantCultureIgnoreCase) ? " border-primary" : string.Empty;
-
-    private void HandleSearch()
-    {
-        selectedCity = string.Empty;
-    }
-
 }
