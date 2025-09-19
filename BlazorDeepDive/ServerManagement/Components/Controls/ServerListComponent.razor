@@ -15,10 +15,10 @@
 
     private readonly string FALLBACK_CITY = "Toronto";
     private List<Server> servers = [];
-
+    
     protected override void OnParametersSet()
     {
-        if (CityName?.Equals(string.Empty) ?? false)
+        if (!string.IsNullOrWhiteSpace(SearchCity))
         {
             servers = ServersRepository.SearchServers(SearchCity!);
             return;

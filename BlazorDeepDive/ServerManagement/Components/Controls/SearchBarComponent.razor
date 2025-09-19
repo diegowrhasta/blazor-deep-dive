@@ -16,4 +16,9 @@
     {
         await OnSearchCallback.InvokeAsync(SearchFilter);
     }
+
+    public void ClearSearchFilter()
+    {
+        SearchFilter = string.Empty;
+    }
 }

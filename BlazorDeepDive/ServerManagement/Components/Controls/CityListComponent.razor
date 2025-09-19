@@ -21,4 +21,8 @@
         await SelectCityCallback.InvokeAsync(SelectedCity);
     }
 
+    public void ClearSelection()
+    {
+        SelectedCity = string.Empty;
+    }
 }

@@ -22,9 +22,8 @@
 </li>
 
 @code {
-    [Parameter]
-    public Server? Server { get; set; }
-    
+    [Parameter] public Server? Server { get; set; }
+
     private void DeleteServer(Server server)
     {
         if (server.Id <= 0)
@@ -36,4 +35,5 @@
         // Servers = ServersRepository.GetServersByCity("Toronto");
         NavigationManager.Refresh(forceReload: true);
     }
+
 }

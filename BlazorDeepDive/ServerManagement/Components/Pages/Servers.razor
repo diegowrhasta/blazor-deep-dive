@@ -3,10 +3,10 @@
 <h3>Servers</h3>
 <br/>
 <br/>
-<CityListComponent SelectCityCallback="HandleSelectedCity"></CityListComponent>
+<CityListComponent @ref="CityListComponent" SelectCityCallback="HandleSelectedCity"></CityListComponent>
 <br/>
 
-<SearchBarComponent OnSearchCallback="HandleSearch"></SearchBarComponent>
+<SearchBarComponent @ref="SearchBarComponent" OnSearchCallback="HandleSearch"></SearchBarComponent>
 <br/>
 
 <ServerListComponent CityName="@CityName" SearchCity="@SearchName"></ServerListComponent>
@@ -14,18 +14,23 @@
 <a href="/servers/add" class="btn btn-primary">Add Server</a>
 
 @code {
-    
+    private SearchBarComponent SearchBarComponent = null!;
+    private CityListComponent CityListComponent = null!;
     private string CityName { get; set; } = "Toronto";
     private string SearchName { get; set; } = string.Empty;
 
     private void HandleSelectedCity(string cityName)
     {
+        SearchBarComponent.ClearSearchFilter();
+        SearchName = string.Empty;
         CityName = cityName;
     }
 
     private void HandleSearch(string searchName)
     {
+        CityListComponent.ClearSelection();
         CityName = string.Empty;
         SearchName = searchName;
     }
+
 }
