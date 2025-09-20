@@ -10,6 +10,13 @@
     <span style="color: @(Server.IsOnline ? "green" : "red")">
         @(Server.IsOnline ? "online" : "offline")
     </span>
+    @if (Server.IsOnline)
+    {
+        <text>@(GetRandomPeopleNumber())</text>
+    }
+    <button class="@($"ms-2 btn btn-outline-{CalculateButtonType(Server.IsOnline)}")" @onclick="UpdateServerStatus">
+        @(CalculateButtonText(Server.IsOnline))
+    </button>
     <a href="/Servers/edit/@Server.Id" class="btn btn-link">Edit</a>
     <EditForm
         Model="Server"
@@ -23,6 +30,31 @@
 
 @code {
     [Parameter] public Server? Server { get; set; }
+
+    private static string GetRandomPeopleNumber()
+    {
+        var randomInt = new Random().Next(minValue: 1, maxValue: 15);
+
+        return $" ({randomInt})";
+    }
+    
+    private static string CalculateButtonType(bool isOnline) => isOnline
+        ? "success"
+        : "danger";
+
+    private static string CalculateButtonText(bool isOnline) => isOnline
+        ? "Turn Off"
+        : "Turn On";
+
+    private void UpdateServerStatus()
+    {
+        if (Server is null)
+        {
+            return;
+        }
+
+        Server.IsOnline = !Server.IsOnline;
+    }
 
     private void DeleteServer(Server server)
     {
