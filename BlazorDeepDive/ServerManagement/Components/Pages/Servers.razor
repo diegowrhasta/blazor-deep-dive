@@ -9,7 +9,9 @@
 <SearchBarComponent @ref="SearchBarComponent" OnSearchCallback="HandleSearch"></SearchBarComponent>
 <br/>
 
-<ServerListComponent CityName="@CityName" SearchCity="@SearchName"></ServerListComponent>
+<CascadingValue Name="SelectedCity" Value="@CityName">
+    <ServerListComponent CityName="@CityName" SearchCity="@SearchName"></ServerListComponent>
+</CascadingValue>
 
 <a href="/servers/add" class="btn btn-primary">Add Server</a>
 

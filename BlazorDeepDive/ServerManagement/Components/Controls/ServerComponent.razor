@@ -5,7 +5,7 @@
     return;
 }
 
-<li @key="Server.Id">
+<li style="background-color: @GetBackgroundColor()" @key="Server.Id">
     @Server.Name in @Server.City is
     <span style="color: @(Server.IsOnline ? "green" : "red")">
         @(Server.IsOnline ? "online" : "offline")
@@ -31,14 +31,29 @@
 @code {
     [Parameter] public Server? Server { get; set; }
 
+    [CascadingParameter(Name = "SelectedCity")]
+    public string? SelectedCity { get; set; }
+
+    private string GetBackgroundColor()
+    {
+        return SelectedCity switch
+        {
+            "Toronto" => "powderblue",
+            "Montreal" => "lightgray",
+            "Ottawa" => "palegreen",
+            "Calgary" => "pink",
+            _ => "white"
+        };
+    }
+
     private static string GetRandomPeopleNumber()
     {
         var randomInt = new Random().Next(minValue: 1, maxValue: 15);
 
         return $" ({randomInt})";
     }
-    
-    private static string CalculateButtonType(bool isOnline) => isOnline
+
+    private static string CalculateButtonType(bool isOnline) => !isOnline
         ? "success"
         : "danger";
 
