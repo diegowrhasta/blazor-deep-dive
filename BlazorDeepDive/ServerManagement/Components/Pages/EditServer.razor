@@ -14,46 +14,31 @@
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <ValidationSummary></ValidationSummary>
 
-    <div class="row mb-3">
-        <InputNumber hidden="true" @bind-Value="@_server.Id"></InputNumber>
-        <div class="col-2">
-            <label class="col-form-label">
-                Name
-            </label>
-        </div>
-        <div class="col-6 input-width">
+    <InputNumber hidden="true" @bind-Value="@_server.Id"></InputNumber>
+    <FieldComponent Label="Name">
+        <Control>
             <InputText class="form-control" @bind-Value="_server.Name"></InputText>
-        </div>
-        <div class="col">
+        </Control>
+        <ValidationControl>
             <ValidationMessage For="() => _server.Name"></ValidationMessage>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-2">
-            <label class="col-form-label">
-                City
-            </label>
-        </div>
-        <div class="col-6 input-width">
+        </ValidationControl>
+    </FieldComponent>
+
+    <FieldComponent Label="City">
+        <Control>
             <InputText class="form-control" @bind-Value="_server.City"></InputText>
-        </div>
-        <div class="col">
+        </Control>
+        <ValidationControl>
             <ValidationMessage For="() => _server.City"></ValidationMessage>
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-2">
-            <label class="col-form-label">
-                Online
-            </label>
-        </div>
-        <div class="col-6">
+        </ValidationControl>
+    </FieldComponent>
+
+    <FieldComponent Label="Online">
+        <Control>
             <InputCheckbox class="form-check-input" @bind-Value="_server.IsOnline"></InputCheckbox>
-        </div>
-        <div class="col">
-            <ValidationMessage For="() => _server.IsOnline"></ValidationMessage>
-        </div>
-    </div>
+        </Control>
+    </FieldComponent>
+
     <br/>
     <button class="btn btn-primary" type="submit">Update</button>
     <a href="/servers" class="btn btn-primary ">Go Back</a>

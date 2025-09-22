@@ -1,12 +1,9 @@
 <ul class="list-unstyled">
-    <Virtualize Items="servers" Context="server">
-        <ItemContent>
-            <ServerComponent Server="@server"></ServerComponent>
-        </ItemContent>
-        <Placeholder>
-            <text>Loading...</text>
-        </Placeholder>
-    </Virtualize>
+    <RepeaterComponent Items="servers">
+        <Row Context="server">
+            <ServerComponent Server="server"></ServerComponent>
+        </Row>
+    </RepeaterComponent>
 </ul>
 
 @code {
@@ -15,7 +12,7 @@
 
     private readonly string FALLBACK_CITY = "Toronto";
     private List<Server> servers = [];
-    
+
     protected override void OnParametersSet()
     {
         if (!string.IsNullOrWhiteSpace(SearchCity))
