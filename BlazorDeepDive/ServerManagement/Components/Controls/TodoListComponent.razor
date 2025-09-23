@@ -1,0 +1,16 @@
+@if (TodoItems is null || !TodoItems.Any())
+{
+    return;
+}
+
+<ul class="list-unstyled">
+    <Virtualize Items="TodoItems" Context="todoItem">
+        <ItemContent>
+            <TodoListItemComponent Item="todoItem"></TodoListItemComponent>
+        </ItemContent>
+    </Virtualize>
+</ul>
+
+@code {
+    [Parameter] public List<TodoItem>? TodoItems { get; set; }
+}

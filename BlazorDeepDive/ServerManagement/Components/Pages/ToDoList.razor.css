@@ -1,6 +1,0 @@
-ul,
-ol {
-    list-style: none;   /* remove bullets/numbers */
-    margin: 0;          /* reset default margins */
-    padding: 0;         /* reset default padding */
-}

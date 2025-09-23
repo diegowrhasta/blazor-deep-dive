@@ -1,0 +1,36 @@
+@if (Item is null)
+{
+    return;
+}
+
+<li @key="Item.Id">
+    <div class="input-group mb-3">
+        <div class="input-group-text">
+            <input @bind-value="Item.IsComplete" checked="@Item.IsComplete" class="form-check-input mt-0"
+                   type="checkbox"
+                   aria-label="Checkbox for following text input">
+        </div>
+        <input @bind-value="Item.Text" disabled="@Item.IsComplete"
+               placeholder="@(CalculatePlaceholder(Item.FreshAdd))" type="text"
+               class="form-control" aria-label="Text input with checkbox">
+        @if (Item.IsComplete)
+        {
+            <div class="p-2">
+                <text>
+                    Completed Date: @($"{Item.CompletedDate:D}")
+                </text>
+            </div>
+        }
+    </div>
+</li>
+
+@code {
+    [Parameter] public TodoItem? Item { get; set; }
+
+    private readonly string FRESH_ADD = "What do you want to do?";
+
+    private string CalculatePlaceholder(bool freshAdd) => freshAdd
+        ? FRESH_ADD
+        : string.Empty;
+
+}
