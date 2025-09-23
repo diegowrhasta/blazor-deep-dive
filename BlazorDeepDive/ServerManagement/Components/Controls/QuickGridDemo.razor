@@ -1,0 +1,93 @@
+@page "/quickgrid"
+
+@inject NavigationManager NavigationManager
+
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+<h3>QuickGrid Demo</h3>
+<br/>
+
+@if (_servers is null)
+{
+    return;
+}
+
+<QuickGrid Items="_servers.AsQueryable()" Pagination="_paginationState">
+    <PropertyColumn Property="s => s.Name"></PropertyColumn>
+    <PropertyColumn Property="s => s.City" Sortable="true"></PropertyColumn>
+    <TemplateColumn Title="Status" SortBy="GridSort<Server>.ByAscending(s => s.IsOnline)">
+        <div style="color: @(context.IsOnline ? "green" : "red")">
+            @(context.IsOnline ? "online" : "offline")
+        </div>
+    </TemplateColumn>
+    <TemplateColumn Title="People Online">
+        @if (context.IsOnline)
+        {
+            <text>@(GetRandomPeopleNumber())</text>
+        }
+        else
+        {
+            <text>N/A</text>
+        }
+    </TemplateColumn>
+    <TemplateColumn>
+        <button class="@($"ms-2 btn btn-outline-{CalculateButtonType(context.IsOnline)}")"
+                @onclick="() => context.IsOnline = !context.IsOnline">
+            @(CalculateButtonText(context.IsOnline))
+        </button>
+    </TemplateColumn>
+    <TemplateColumn>
+        <a href="/Servers/edit/@context.Id" class="btn btn-outline-primary">Edit</a>
+    </TemplateColumn>
+    <TemplateColumn>
+        <ChildContent Context="server">
+            <EditForm
+                style="@("background-color: white")"
+                Model="server"
+                FormName="@($"Server-{server.Id}-form")"
+                OnValidSubmit="@(() => DeleteServer(server))">
+                <button type="submit" class="btn btn-primary">
+                    Delete
+                </button>
+            </EditForm>
+        </ChildContent>
+    </TemplateColumn>
+</QuickGrid>
+<Paginator State="_paginationState"></Paginator>
+
+@code {
+    private readonly List<Server>? _servers = ServersRepository.GetServers();
+
+    private PaginationState _paginationState = new()
+    {
+        ItemsPerPage = 5,
+    };
+
+    private static string GetRandomPeopleNumber()
+    {
+        var randomInt = new Random().Next(minValue: 1, maxValue: 15);
+
+        return $" ({randomInt})";
+    }
+
+    private static string CalculateButtonType(bool isOnline) => !isOnline
+        ? "success"
+        : "danger";
+
+    private static string CalculateButtonText(bool isOnline) => isOnline
+        ? "Turn Off"
+        : "Turn On";
+
+    private void DeleteServer(Server server)
+    {
+        if (server.Id <= 0)
+        {
+            return;
+        }
+
+        ServersRepository.DeleteServer(server.Id);
+        // Servers = ServersRepository.GetServersByCity("Toronto");
+        NavigationManager.Refresh(forceReload: true);
+    }
+
+}

@@ -5,28 +5,44 @@
     return;
 }
 
-<li style="background-color: @GetBackgroundColor()" @key="Server.Id">
-    @Server.Name in @Server.City is
-    <span style="color: @(Server.IsOnline ? "green" : "red")">
+<tr style="background-color: @GetBackgroundColor()" @key="Server.Id">
+    <td>
+        @Server.Name
+    </td>
+    <td>
+        @Server.City
+    </td>
+    <td style="color: @(Server.IsOnline ? "green" : "red")">
         @(Server.IsOnline ? "online" : "offline")
-    </span>
-    @if (Server.IsOnline)
-    {
-        <text>@(GetRandomPeopleNumber())</text>
-    }
-    <button class="@($"ms-2 btn btn-outline-{CalculateButtonType(Server.IsOnline)}")" @onclick="UpdateServerStatus">
-        @(CalculateButtonText(Server.IsOnline))
-    </button>
-    <a href="/Servers/edit/@Server.Id" class="btn btn-link">Edit</a>
-    <EditForm
-        Model="Server"
-        FormName="@($"Server-{Server.Id}-form")"
-        OnValidSubmit="@(() => DeleteServer(Server))">
-        <button type="submit" class="btn btn-primary">
-            Delete
+    </td>
+    <td>
+        @if (Server.IsOnline)
+        {
+            <text>@(GetRandomPeopleNumber())</text>
+        }
+        else
+        {
+            <text>N/A</text>
+        }
+    </td>
+    <td>
+        <button class="@($"ms-2 btn btn-outline-{CalculateButtonType(Server.IsOnline)}")" @onclick="UpdateServerStatus">
+            @(CalculateButtonText(Server.IsOnline))
         </button>
-    </EditForm>
-</li>
+        <a href="/Servers/edit/@Server.Id" class="btn btn-outline-primary">Edit</a>
+    </td>
+    <td>
+        <EditForm
+            style="@($"background-color: {GetBackgroundColor()}")"
+            Model="Server"
+            FormName="@($"Server-{Server.Id}-form")"
+            OnValidSubmit="@(() => DeleteServer(Server))">
+            <button type="submit" class="btn btn-primary">
+                Delete
+            </button>
+        </EditForm>
+    </td>
+</tr>
 
 @code {
     [Parameter] public Server? Server { get; set; }
