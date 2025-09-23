@@ -1,14 +1,18 @@
-<div class="input-group mb-3 input-width">
+<div class="input-group mb-3 input-width" @attributes="OtherAttributes">
     <input
         type="text" class="form-control"
         placeholder="Search Servers"
         @bind-value="SearchFilter"
         @bind-value:event="oninput">
-    <button class="btn btn-outline-secondary" type="button" id="search-button" @onclick="HandleSearchAsync">Search</button>
+    <button class="btn btn-outline-secondary" type="button" id="search-button" @onclick="HandleSearchAsync">Search
+    </button>
 </div>
 
 @code {
     [Parameter] public EventCallback<string> OnSearchCallback { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? OtherAttributes { get; set; }
 
     private string SearchFilter { get; set; } = string.Empty;
 
@@ -21,4 +25,5 @@
     {
         SearchFilter = string.Empty;
     }
+
 }
