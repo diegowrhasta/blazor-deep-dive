@@ -47,10 +47,10 @@
 
     protected override void OnAfterRender(bool firstRender)
     {
+        base.OnAfterRender(firstRender);
+        
         var guid = Guid.NewGuid();
         Console.WriteLine($"CityListComponent: {nameof(OnAfterRender)} : {guid}");
-        
-        base.OnAfterRender(firstRender);
     }
 
     public void Dispose()

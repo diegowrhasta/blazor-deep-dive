@@ -33,7 +33,44 @@
     private readonly string FALLBACK_CITY = "Toronto";
     private List<Server> servers = [];
 
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue<string>("CityName", out var cityName))
+        {
+            if (cityName != CityName)
+            {
+                base.SetParametersAsync(parameters);
+            }
+        }
+
+        if (parameters.TryGetValue<string>("SearchFilter", out var searchFilter))
+        {
+            if (searchFilter != SearchCity)
+            {
+                base.SetParametersAsync(parameters);
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        if (!firstRender)
+        {
+            return;
+        }
+
+        PopulateCities();
+    }
+
     protected override void OnParametersSet()
+    {
+        PopulateCities();
+    }
+
+    private void PopulateCities()
     {
         if (!string.IsNullOrWhiteSpace(SearchCity))
         {
@@ -42,6 +79,7 @@
         }
 
         servers = ServersRepository.GetServersByCity(CityName ?? FALLBACK_CITY);
+        StateHasChanged();
     }
 
 }
