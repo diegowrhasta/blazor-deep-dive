@@ -1,3 +1,5 @@
+@implements IDisposable
+
 <div class="container-fluid text-center">
     <div class="row w-50">
         @foreach (var city in Cities)
@@ -13,6 +15,49 @@
 
     private string SelectedCity { get; set; } = "Toronto";
     private List<string> Cities = CitiesRepository.Cities;
+
+    protected override bool ShouldRender()
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityListComponent: {nameof(ShouldRender)} : {guid}");
+
+        base.ShouldRender();
+        return true;
+    }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityListComponent: {nameof(SetParametersAsync)} : {guid}");
+
+        await base.SetParametersAsync(parameters);
+    }
+
+    protected override void OnInitialized()
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityListComponent: {nameof(OnInitialized)} : {guid}");
+    }
+
+    protected override void OnParametersSet()
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityListComponent: {nameof(OnParametersSet)} : {guid}");
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityListComponent: {nameof(OnAfterRender)} : {guid}");
+        
+        base.OnAfterRender(firstRender);
+    }
+
+    public void Dispose()
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityListComponent: {nameof(Dispose)} : {guid}");
+    }
 
     private async Task HandleCitySelectionAsync(string cityName)
     {

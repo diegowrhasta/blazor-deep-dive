@@ -1,3 +1,5 @@
+@implements IDisposable
+
 <div class="col">
     <div class="@($"card{IsActive(SelectedCity, City)}")">
         <img style="max-width: 150px; max-height: 150px"
@@ -17,6 +19,49 @@
 
     [Parameter] public EventCallback<string> SelectCityCallback { get; set; }
 
+    protected override bool ShouldRender()
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityComponent: {nameof(ShouldRender)} : {guid}");
+
+        base.ShouldRender();
+        return true;
+    }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityComponent: {nameof(SetParametersAsync)} : {guid}");
+
+        await base.SetParametersAsync(parameters);
+    }
+
+    protected override void OnInitialized()
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityComponent: {nameof(OnInitialized)} : {guid}");
+    }
+
+    protected override void OnParametersSet()
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityComponent: {nameof(OnParametersSet)} : {guid}");
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityComponent: {nameof(OnAfterRender)} : {guid}");
+        
+        base.OnAfterRender(firstRender);
+    }
+
+    public void Dispose()
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"CityComponent: {nameof(Dispose)} : {guid}");
+    }
+    
     private async Task SelectCityAsync(string city)
     {
         await SelectCityCallback.InvokeAsync(city);
