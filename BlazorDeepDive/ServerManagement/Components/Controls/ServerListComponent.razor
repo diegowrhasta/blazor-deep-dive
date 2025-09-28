@@ -32,6 +32,7 @@
 
     private readonly string FALLBACK_CITY = "Toronto";
     private List<Server> servers = [];
+    public Timer? Timer { get; set; }
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
@@ -62,7 +63,7 @@
             return;
         }
 
-        PopulateCities();
+        Timer = new Timer(_ => { base.InvokeAsync(StateHasChanged); }, state: null, dueTime: 2000, period: 2000);
     }
 
     protected override void OnParametersSet()
