@@ -13,7 +13,8 @@
 @code {
     [Parameter] public EventCallback<string> SelectCityCallback { get; set; }
 
-    private string SelectedCity { get; set; } = "Toronto";
+    [Parameter] public string SelectedCity { get; set; } = "Toronto";
+
     private List<string> Cities = CitiesRepository.Cities;
 
     protected override bool ShouldRender()
@@ -48,7 +49,7 @@
     protected override void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
-        
+
         var guid = Guid.NewGuid();
         Console.WriteLine($"CityListComponent: {nameof(OnAfterRender)} : {guid}");
     }
@@ -70,4 +71,5 @@
     {
         SelectedCity = string.Empty;
     }
+
 }

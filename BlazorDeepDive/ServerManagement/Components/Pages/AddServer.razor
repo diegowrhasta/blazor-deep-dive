@@ -59,7 +59,7 @@
     private void Submit()
     {
         ServersRepository.AddServer(_server);
-        NavigationManager.NavigateTo("/servers");
+        NavigationManager.NavigateTo($"/servers/back-from/{_server.City}");
     }
 
 }

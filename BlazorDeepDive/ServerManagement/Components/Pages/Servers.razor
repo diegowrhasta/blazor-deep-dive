@@ -1,11 +1,15 @@
 @page "/servers"
+@page "/servers/back-from/{previousCityName}"
+
+@inject NavigationManager NavigationManager
 
 @* @attribute [ExcludeFromInteractiveRouting] *@
 
 <h3>Servers</h3>
 <br/>
 <br/>
-<CityListComponent @ref="CityListComponent" SelectCityCallback="HandleSelectedCity"></CityListComponent>
+<CityListComponent SelectedCity="@CityName" @ref="CityListComponent"
+                   SelectCityCallback="HandleSelectedCity"></CityListComponent>
 <br/>
 
 <SearchBarComponent @ref="SearchBarComponent" OnSearchCallback="HandleSearch"></SearchBarComponent>
@@ -18,6 +22,7 @@
 <a href="/servers/add" class="btn btn-primary">Add Server</a>
 
 @code {
+    [Parameter] public string? PreviousCityName { get; set; }
     private SearchBarComponent SearchBarComponent = null!;
     private CityListComponent CityListComponent = null!;
     private string CityName { get; set; } = "Toronto";
@@ -35,6 +40,23 @@
         CityListComponent.ClearSelection();
         CityName = string.Empty;
         SearchName = searchName;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        if (!NavigationManager.Uri.Contains("back-from") || string.IsNullOrWhiteSpace(PreviousCityName))
+        {
+            return;
+        }
+
+        CityName = PreviousCityName;
+
+        StateHasChanged();
     }
 
 }
