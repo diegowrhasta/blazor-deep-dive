@@ -1,0 +1,102 @@
+@page "/server/{id:int?}"
+
+@inject NavigationManager NavigationManager
+
+@if (Id is not null)
+{
+    <h3>Edit Server</h3>
+}
+else
+{
+    <h3>Add Server</h3>
+}
+
+@if (Server is null)
+{
+    return;
+}
+
+<EditForm Model="Server" FormName="formServer" OnValidSubmit="Submit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+    @if (Server.Id > 0)
+    {
+        <InputNumber hidden="true" @bind-Value="@Server.Id"></InputNumber>
+    }
+    <FieldComponent Label="Name">
+        <Control>
+            <InputText class="form-control" @bind-Value="Server.Name"></InputText>
+        </Control>
+        <ValidationControl>
+            <ValidationMessage For="() => Server.Name"></ValidationMessage>
+        </ValidationControl>
+    </FieldComponent>
+
+    <FieldComponent Label="City">
+        <Control>
+            <InputText class="form-control" @bind-Value="Server.City"></InputText>
+        </Control>
+        <ValidationControl>
+            <ValidationMessage For="() => Server.City"></ValidationMessage>
+        </ValidationControl>
+    </FieldComponent>
+
+    <FieldComponent Label="Online">
+        <Control>
+            <InputCheckbox class="form-check-input" @bind-Value="Server.IsOnline"></InputCheckbox>
+        </Control>
+    </FieldComponent>
+
+    <br/>
+    <button class="btn btn-primary" type="submit">@(CalculateButtonLabel(Server.Id))</button>
+</EditForm>
+
+@code {
+    [Parameter] public int? Id { get; set; }
+
+    // [SupplyParameterFromQuery] public string? City { get; set; }
+
+    [SupplyParameterFromForm] public Server? Server { get; set; }
+
+    private static string CalculateButtonLabel(int id) => id > 0
+        ? "Update"
+        : "Add";
+
+    protected override void OnParametersSet()
+    {
+        if (Id.HasValue)
+        {
+            Server ??= ServersRepository.GetServerById(Id.Value);
+        }
+        else
+        {
+            Server ??= new Server { IsOnline = false };
+        }
+
+        // if (Server is not null && !string.IsNullOrWhiteSpace(City))
+        // {
+        //     Server.City = City;
+        // }
+    }
+
+    private void Submit()
+    {
+        if (Server is null)
+        {
+            return;
+        }
+
+        if (Server.Id > 0)
+        {
+            ServersRepository.UpdateServer(Server.Id, Server);
+        }
+        else
+        {
+            ServersRepository.AddServer(Server);
+        }
+
+        NavigationManager.NavigateTo($"/servers/back-from/{Server?.City}");
+    }
+
+}

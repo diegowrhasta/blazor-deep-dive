@@ -29,7 +29,7 @@
         <button class="@($"ms-2 btn btn-outline-{CalculateButtonType(Server.IsOnline)}")" @onclick="UpdateServerStatus">
             @(CalculateButtonText(Server.IsOnline))
         </button>
-        <a href="/Servers/edit/@Server.Id" class="btn btn-outline-primary">Edit</a>
+        <a href="/server/@Server.Id" class="btn btn-outline-primary">Edit</a>
     </td>
     <td>
         <EditForm
