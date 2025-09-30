@@ -2,6 +2,7 @@
 @page "/servers/back-from/{previousCityName}"
 
 @inject NavigationManager NavigationManager
+@inject TorontoOnlineServersStore TorontoOnlineServersStore
 
 @* @attribute [ExcludeFromInteractiveRouting] *@
 
@@ -55,6 +56,10 @@
         }
 
         CityName = PreviousCityName;
+
+        var torontoServers = ServersRepository.GetServersByCity("Toronto");
+
+        TorontoOnlineServersStore.SetNumberOfOnlineServers(torontoServers.Count(x => x.IsOnline));
 
         StateHasChanged();
     }

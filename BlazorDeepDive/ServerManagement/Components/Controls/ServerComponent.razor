@@ -1,4 +1,5 @@
 @inject NavigationManager NavigationManager
+@inject TorontoOnlineServersStore TorontoOnlineServersStore
 
 @if (Server is null)
 {
@@ -84,7 +85,21 @@
             return;
         }
 
-        Server.IsOnline = !Server.IsOnline;
+        var status = Server.IsOnline = !Server.IsOnline;
+
+        if ((Server.City ?? string.Empty).Equals("Toronto", StringComparison.OrdinalIgnoreCase))
+        {
+            var torontoServerNumber = TorontoOnlineServersStore.GetNumberOfOnlineServers();
+
+            if (status)
+            {
+                TorontoOnlineServersStore.SetNumberOfOnlineServers(++torontoServerNumber);
+            }
+            else if (torontoServerNumber >= 1)
+            {
+                TorontoOnlineServersStore.SetNumberOfOnlineServers(--torontoServerNumber);
+            }
+        }
     }
 
     private void DeleteServer(Server server)

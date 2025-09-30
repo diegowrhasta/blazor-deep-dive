@@ -1,9 +1,8 @@
-using ServerManagement.Components;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+builder.Services.AddScoped<TorontoOnlineServersStore>();
 
 var app = builder.Build();
 
@@ -16,7 +15,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 
 app.UseAntiforgery();
 

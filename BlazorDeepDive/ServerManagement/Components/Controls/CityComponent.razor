@@ -1,5 +1,7 @@
 @implements IDisposable
 
+@inject TorontoOnlineServersStore TorontoOnlineServersStore
+
 <div class="col">
     <div class="@($"card{IsActive(SelectedCity, City)}")">
         <img style="max-width: 150px; max-height: 150px"
@@ -10,10 +12,18 @@
             <button type="button" class="btn btn-primary"
                     @onclick="@(async () => await SelectCityAsync(City))">@City</button>
         </div>
+        <div>
+            @if (City.Equals("Toronto", StringComparison.OrdinalIgnoreCase))
+            {
+                <text>@NumberOfOnlineTorontoServers</text>
+            }
+        </div>
     </div>
 </div>
 
 @code {
+    private int NumberOfOnlineTorontoServers;
+    
     [Parameter] public string SelectedCity { get; set; } = string.Empty;
     [Parameter] public string City { get; set; } = string.Empty;
 
@@ -50,16 +60,19 @@
 
     protected override void OnAfterRender(bool firstRender)
     {
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"CityComponent: {nameof(OnAfterRender)} : {guid}");
-        
-        base.OnAfterRender(firstRender);
+        if (!firstRender)
+        {
+            return;
+        }
+
+        NumberOfOnlineTorontoServers = TorontoOnlineServersStore.GetNumberOfOnlineServers();
+        TorontoOnlineServersStore.AddStateChangeListeners(OnServerStatusChange);
+        StateHasChanged();
     }
 
     public void Dispose()
     {
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"CityComponent: {nameof(Dispose)} : {guid}");
+        TorontoOnlineServersStore.RemoveStateChangeListeners(OnServerStatusChange);
     }
     
     private async Task SelectCityAsync(string city)
@@ -70,4 +83,9 @@
     private static string IsActive(string currentCity, string cityName) =>
         currentCity.Equals(cityName, StringComparison.InvariantCultureIgnoreCase) ? " border-primary" : string.Empty;
 
+    private void OnServerStatusChange()
+    {
+        NumberOfOnlineTorontoServers = TorontoOnlineServersStore.GetNumberOfOnlineServers();
+        StateHasChanged();
+    }
 }
