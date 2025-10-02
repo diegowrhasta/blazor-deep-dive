@@ -1,0 +1,34 @@
+@page "/browser-wasm-2"
+
+@inject IJSRuntime JSRuntime
+
+@inject ContainerStorage ContainerStorage
+
+@rendermode InteractiveWebAssembly
+
+<h3>BrowserStorageStep2</h3>
+
+<br/>
+<br/>
+<br/>
+
+<text>
+    @Data
+</text>
+
+@code {
+    private string Data { get; set; } = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        // Data = await JSRuntime.InvokeAsync<string>("sessionStorage.getItem", "demo-data");
+        Data = ContainerStorage.GetMessage();
+        StateHasChanged();
+    }
+
+}

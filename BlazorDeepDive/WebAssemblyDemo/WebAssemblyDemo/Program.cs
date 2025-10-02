@@ -1,3 +1,4 @@
+using WebAssemblyDemo.Client;
 using WebAssemblyDemo.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+builder.Services.AddSingleton<ContainerStorage>();
 
 var app = builder.Build();
 
