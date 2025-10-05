@@ -3,6 +3,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddScoped<TorontoOnlineServersStore>();
+builder.Services
+    .AddDbContextFactory<ServerManagementContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("ServerManagement")));
 
 var app = builder.Build();
 
