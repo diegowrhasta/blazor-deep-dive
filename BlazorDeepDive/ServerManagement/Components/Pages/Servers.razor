@@ -3,6 +3,7 @@
 
 @inject NavigationManager NavigationManager
 @inject TorontoOnlineServersStore TorontoOnlineServersStore
+@inject IServersEfCoreRepository ServersRepository
 
 @* @attribute [ExcludeFromInteractiveRouting] *@
 
@@ -43,21 +44,21 @@
         SearchName = searchName;
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
         {
             return;
         }
 
-        if (!NavigationManager.Uri.Contains("back-from") || string.IsNullOrWhiteSpace(PreviousCityName))
+        if (NavigationManager.Uri.Contains("back-from") && string.IsNullOrWhiteSpace(PreviousCityName))
         {
             return;
         }
 
-        CityName = PreviousCityName;
+        CityName = PreviousCityName ?? "Toronto";
 
-        var torontoServers = ServersRepository.GetServersByCity("Toronto");
+        var torontoServers = await ServersRepository.GetServersByCityAsync(CityName);
 
         TorontoOnlineServersStore.SetNumberOfOnlineServers(torontoServers.Count(x => x.IsOnline));
 

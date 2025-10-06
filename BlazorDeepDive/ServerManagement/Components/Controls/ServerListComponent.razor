@@ -1,3 +1,5 @@
+@inject IServersEfCoreRepository ServersRepository
+
 <table class="table table-striped">
     <RepeaterComponent Items="servers">
         <Header>
@@ -66,20 +68,20 @@
         Timer = new Timer(_ => { base.InvokeAsync(StateHasChanged); }, state: null, dueTime: 2000, period: 2000);
     }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        PopulateCities();
+        await PopulateCitiesAsync();
     }
 
-    private void PopulateCities()
+    private async Task PopulateCitiesAsync()
     {
         if (!string.IsNullOrWhiteSpace(SearchCity))
         {
-            servers = ServersRepository.SearchServers(SearchCity!);
+            servers = await ServersRepository.SearchServersAsync(SearchCity!);
             return;
         }
 
-        servers = ServersRepository.GetServersByCity(CityName ?? FALLBACK_CITY);
+        servers = await ServersRepository.GetServersByCityAsync(CityName ?? FALLBACK_CITY);
         StateHasChanged();
     }
 

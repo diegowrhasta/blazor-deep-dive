@@ -1,5 +1,6 @@
 @inject NavigationManager NavigationManager
 @inject TorontoOnlineServersStore TorontoOnlineServersStore
+@inject IServersEfCoreRepository ServersRepository
 
 @if (Server is null)
 {
@@ -27,7 +28,7 @@
         }
     </td>
     <td>
-        <button class="@($"ms-2 btn btn-outline-{CalculateButtonType(Server.IsOnline)}")" @onclick="UpdateServerStatus">
+        <button class="@($"ms-2 btn btn-outline-{CalculateButtonType(Server.IsOnline)}")" @onclick="UpdateServerStatusAsync">
             @(CalculateButtonText(Server.IsOnline))
         </button>
         <a href="/server/@Server.Id" class="btn btn-outline-primary">Edit</a>
@@ -37,7 +38,7 @@
             style="@($"background-color: {GetBackgroundColor()}")"
             Model="Server"
             FormName="@($"Server-{Server.Id}-form")"
-            OnValidSubmit="@(() => DeleteServer(Server))">
+            OnValidSubmit="@(async () => await DeleteServerAsync(Server))">
             <button type="submit" class="btn btn-primary">
                 Delete
             </button>
@@ -78,7 +79,7 @@
         ? "Turn Off"
         : "Turn On";
 
-    private void UpdateServerStatus()
+    private async Task UpdateServerStatusAsync()
     {
         if (Server is null)
         {
@@ -86,6 +87,7 @@
         }
 
         var status = Server.IsOnline = !Server.IsOnline;
+        await ServersRepository.UpdateServerAsync(Server.Id, Server);
 
         if ((Server.City ?? string.Empty).Equals("Toronto", StringComparison.OrdinalIgnoreCase))
         {
@@ -102,14 +104,14 @@
         }
     }
 
-    private void DeleteServer(Server server)
+    private async Task DeleteServerAsync(Server server)
     {
         if (server.Id <= 0)
         {
             return;
         }
 
-        ServersRepository.DeleteServer(server.Id);
+        await ServersRepository.DeleteServerAsync(server.Id);
         // Servers = ServersRepository.GetServersByCity("Toronto");
         NavigationManager.Refresh(forceReload: true);
     }

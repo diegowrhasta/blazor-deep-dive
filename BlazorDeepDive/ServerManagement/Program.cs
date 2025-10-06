@@ -6,6 +6,7 @@ builder.Services.AddScoped<TorontoOnlineServersStore>();
 builder.Services
     .AddDbContextFactory<ServerManagementContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("ServerManagement")));
+builder.Services.AddTransient<IServersEfCoreRepository, ServersEfCoreRepository>();
 
 var app = builder.Build();
 

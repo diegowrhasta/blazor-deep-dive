@@ -1,8 +1,10 @@
 @page "/quickgrid"
 
 @inject NavigationManager NavigationManager
+@inject IServersEfCoreRepository ServersRepository
 
 @using Microsoft.AspNetCore.Components.QuickGrid
+@using ServerManagement.Components.Pages
 
 <h3>QuickGrid Demo</h3>
 <br/>
@@ -32,7 +34,7 @@
     </TemplateColumn>
     <TemplateColumn>
         <button class="@($"ms-2 btn btn-outline-{CalculateButtonType(context.IsOnline)}")"
-                @onclick="() => context.IsOnline = !context.IsOnline">
+                @onclick="async () => await UpdateServerStatus(context)">
             @(CalculateButtonText(context.IsOnline))
         </button>
     </TemplateColumn>
@@ -45,7 +47,7 @@
                 style="@("background-color: white")"
                 Model="server"
                 FormName="@($"Server-{server.Id}-form")"
-                OnValidSubmit="@(() => DeleteServer(server))">
+                OnValidSubmit="@(async () => await DeleteServerAsync(server))">
                 <button type="submit" class="btn btn-primary">
                     Delete
                 </button>
@@ -56,7 +58,18 @@
 <Paginator State="_paginationState"></Paginator>
 
 @code {
-    private readonly List<Server>? _servers = ServersRepository.GetServers();
+    private List<Server>? _servers;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        _servers = await ServersRepository.GetServersAsync();
+        StateHasChanged();
+    }
 
     private PaginationState _paginationState = new()
     {
@@ -78,14 +91,21 @@
         ? "Turn Off"
         : "Turn On";
 
-    private void DeleteServer(Server server)
+    private async Task UpdateServerStatus(Server server)
+    {
+        server.IsOnline = !server.IsOnline;
+
+        await ServersRepository.UpdateServerAsync(server.Id, server);
+    }
+    
+    private async Task DeleteServerAsync(Server server)
     {
         if (server.Id <= 0)
         {
             return;
         }
 
-        ServersRepository.DeleteServer(server.Id);
+        await ServersRepository.DeleteServerAsync(server.Id);
         // Servers = ServersRepository.GetServersByCity("Toronto");
         NavigationManager.Refresh(forceReload: true);
     }
