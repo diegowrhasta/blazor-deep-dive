@@ -1,4 +1,5 @@
 using WebAssemblyDemo.Client;
+using WebAssemblyDemo.Client.Models;
 using WebAssemblyDemo.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,12 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 builder.Services.AddSingleton<ContainerStorage>();
+builder.Services.AddHttpClient("ServersApi", client =>
+{
+    client.BaseAddress = new Uri("https://webassembly-demo-922cb-default-rtdb.asia-southeast1.firebasedatabase.app");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+builder.Services.AddTransient<IServersApiRepository, ServersApiRepository>();
 
 var app = builder.Build();
 
