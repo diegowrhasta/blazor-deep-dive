@@ -15,11 +15,20 @@ public class ServersApiRepository(IHttpClientFactory clientFactory) : IServersAp
         return response ?? [];
     }
 
+    public async Task<Server?> GetServerByIdAsync(int serverId)
+    {
+        var client = clientFactory.CreateClient(API_NAME);
+        
+        var server = await client.GetFromJsonAsync<Server>($"/servers/{serverId}.json");
+
+        return server;
+    }
+
     public async Task DeleteServerAsync(int serverId)
     {
         var client = clientFactory.CreateClient(API_NAME);
 
-        var response = await client.DeleteAsync("/servers.json");
+        var response = await client.DeleteAsync($"/servers/{serverId}.json");
         response.EnsureSuccessStatusCode();
     }
 
@@ -46,5 +55,18 @@ public class ServersApiRepository(IHttpClientFactory clientFactory) : IServersAp
             
             return servers.Max(s => s.ServerId) + 1;
         }
+    }
+
+    public async Task UpdateServerAsync(Server server, int serverId)
+    {
+        if (server.ServerId != serverId)
+        {
+            return;
+        }
+
+        var httpClient = clientFactory.CreateClient(API_NAME);
+
+        var response = await httpClient.PatchAsJsonAsync($"/servers/{serverId}.json", server);
+        response.EnsureSuccessStatusCode();
     }
 }

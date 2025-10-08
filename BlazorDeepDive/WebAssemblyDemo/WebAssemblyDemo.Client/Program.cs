@@ -12,5 +12,4 @@ builder.Services.AddHttpClient("ServersApi", client =>
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
-
 await builder.Build().RunAsync();

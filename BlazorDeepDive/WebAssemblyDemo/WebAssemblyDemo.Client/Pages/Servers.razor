@@ -38,7 +38,7 @@
                         <td>@server.City</td>
                         <td>@(server.IsOnline ? "Online" : "Offline")</td>
                         <td><a class="btn btn-link" href="/wasm/servers/@server.ServerId">Edit</a></td>
-                        <td><button class="btn btn-link" @onclick="@(()=> { DeleteAsync(server.ServerId); })">Delete</button></td>
+                        <td><button class="btn btn-link" @onclick="@(async ()=> { await DeleteAsync(server.ServerId); })">Delete</button></td>
                     </tr>
                 }                
             }
@@ -64,5 +64,6 @@
     {
         await ServersApiRepository.DeleteServerAsync(serverId);
         listServers = await ServersApiRepository.GetServersAsync();
+        StateHasChanged();
     }
 }         

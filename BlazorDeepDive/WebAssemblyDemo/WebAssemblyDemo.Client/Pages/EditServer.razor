@@ -4,6 +4,7 @@
 @rendermode InteractiveWebAssembly
 
 @inject NavigationManager NavigationManager
+@inject IServersApiRepository ServersRepository;
 
 <h3>Edit Server</h3>
 <br/>
@@ -11,7 +12,7 @@
 
 @if (server != null)
 {
-    <EditForm Model="server" FormName="formServer" OnValidSubmit="Submit">
+    <EditForm Model="server" FormName="formServer" OnValidSubmit="SubmitAsync">
         <DataAnnotationsValidator></DataAnnotationsValidator>
         <ValidationSummary></ValidationSummary>
 
@@ -49,7 +50,7 @@
                 <InputCheckbox @bind-Value="server.IsOnline" class="form-check-input"></InputCheckbox>
             </div>
         </div>
-        
+
         <br/>
         <button class="btn btn-primary" type="submit">Update</button>
         &nbsp;
@@ -60,25 +61,29 @@
 
 @code {
 
-    [Parameter]
-    public int Id { get; set; }
-    
+    [Parameter] public int Id { get; set; }
+
     private Server? server { get; set; }
 
-    protected override void OnParametersSet()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        server ??= ServersRepository.GetServerById(this.Id);
+        if (!firstRender)
+        {
+            return;
+        }
+        
+        server ??= await ServersRepository.GetServerByIdAsync(this.Id);
+        StateHasChanged();
     }
 
-    private void Submit()
+    private async Task SubmitAsync()
     {
         if (server != null)
         {
-            ServersRepository.UpdateServer(server.ServerId, server);
+            await ServersRepository.UpdateServerAsync(server, server.ServerId);
         }
 
-        NavigationManager.NavigateTo($"/wasm/servers/");        
-        
+        NavigationManager.NavigateTo($"/wasm/servers/");
     }
 
 }
