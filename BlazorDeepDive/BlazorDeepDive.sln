@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAssemblyDemo.Client", "W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security.BlazorSSR", "Security.BlazorSSR\Security.BlazorSSR.csproj", "{72D32B71-A866-40EB-9817-9DE240908C4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security.BlazorServerInteractivityPerPage", "Security.BlazorServerInteractivityPerPage\Security.BlazorServerInteractivityPerPage.csproj", "{35C528A9-9DCA-4699-A946-C2C8C48944F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{72D32B71-A866-40EB-9817-9DE240908C4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72D32B71-A866-40EB-9817-9DE240908C4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72D32B71-A866-40EB-9817-9DE240908C4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35C528A9-9DCA-4699-A946-C2C8C48944F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35C528A9-9DCA-4699-A946-C2C8C48944F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35C528A9-9DCA-4699-A946-C2C8C48944F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35C528A9-9DCA-4699-A946-C2C8C48944F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
