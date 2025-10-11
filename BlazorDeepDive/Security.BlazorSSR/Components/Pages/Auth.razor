@@ -1,7 +1,5 @@
 ﻿@page "/auth"
 
-@using Microsoft.AspNetCore.Authorization
-
 @attribute [Authorize]
 
 <PageTitle>Auth</PageTitle>
@@ -10,4 +8,14 @@
 
 <AuthorizeView>
     Hello @context.User.Identity?.Name!
+    
+    @if (context.User.Claims is not null)
+    {
+        <ul>
+            @foreach (var claim in context.User.Claims)
+            {
+                <li>@claim.Type : @claim.Value</li>
+            }
+        </ul>
+    }
 </AuthorizeView>
