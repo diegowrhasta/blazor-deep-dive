@@ -19,7 +19,8 @@ builder.Services.AddAuthentication(options =>
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
     .AddIdentityCookies();
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("Manager", policy => policy.RequireClaim("Role", "Manager"));
 
 builder.Services
     .AddDbContextFactory<ApplicationDbContext>(options =>

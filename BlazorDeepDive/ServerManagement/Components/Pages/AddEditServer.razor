@@ -1,6 +1,6 @@
 @page "/server/{id:int?}"
 
-@attribute [Authorize]
+@attribute [Authorize(Policy = "Manager")]
 
 @inject NavigationManager NavigationManager
 @inject IServersEfCoreRepository ServersRepository
