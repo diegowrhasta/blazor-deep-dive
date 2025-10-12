@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security.BlazorWebAssemblyP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security.BlazorWebAssemblyPerPage.Client", "Security.BlazorWebAssemblyPerPage\Security.BlazorWebAssemblyPerPage.Client\Security.BlazorWebAssemblyPerPage.Client.csproj", "{A11FC6DA-B1F6-4251-9D2C-DAFAB596D9CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security.BlazorServerInteractivityGlobal", "Security.BlazorServerInteractivityGlobal\Security.BlazorServerInteractivityGlobal.csproj", "{906BA156-A578-4279-8DCC-130F658FF05F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{A11FC6DA-B1F6-4251-9D2C-DAFAB596D9CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A11FC6DA-B1F6-4251-9D2C-DAFAB596D9CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A11FC6DA-B1F6-4251-9D2C-DAFAB596D9CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{906BA156-A578-4279-8DCC-130F658FF05F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{906BA156-A578-4279-8DCC-130F658FF05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{906BA156-A578-4279-8DCC-130F658FF05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{906BA156-A578-4279-8DCC-130F658FF05F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -4,12 +4,10 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>aspnet-Security.BlazorWebAssemblyPerPage-cf732ca7-3260-4a9e-ae5c-c00befe07e0a</UserSecretsId>
+        <UserSecretsId>aspnet-Security.BlazorServerInteractivityGlobal-184e32bb-5e19-4dbb-86e6-4c5f044e6a58</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Security.BlazorWebAssemblyPerPage.Client\Security.BlazorWebAssemblyPerPage.Client.csproj"/>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.5"/>
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.5"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.5"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.5"/>
