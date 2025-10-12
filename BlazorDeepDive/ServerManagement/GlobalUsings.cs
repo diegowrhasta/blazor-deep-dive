@@ -3,3 +3,5 @@ global using ServerManagement.StateStore;
 global using ServerManagement.Data;
 global using Microsoft.EntityFrameworkCore;
 global using ServerManagement.Models;
+global using Microsoft.AspNetCore.Identity;
+global using ServerManagement.Components.Account;
