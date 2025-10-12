@@ -1,0 +1,51 @@
+﻿@implements IDisposable
+
+@inject PersistentComponentState ApplicationState
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<Router AppAssembly="typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
+            <NotAuthorized>
+                <RedirectToLogin/>
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="routeData" Selector="h1"/>
+    </Found>
+</Router>
+
+@code {
+
+    private PersistingComponentStateSubscription? _subscription;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _subscription = ApplicationState.RegisterOnPersisting(OnPersistingAsync);
+    }
+
+    private async Task OnPersistingAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var principal = authState.User;
+
+        if (principal.Identity?.IsAuthenticated == true)
+        {
+            var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = principal.FindFirst(ClaimTypes.Email)?.Value;
+            var role = principal.FindFirst(ClaimTypes.Role)?.Value;
+
+            ApplicationState.PersistAsJson(nameof(UserInfo), new UserInfo
+            {
+                UserId = userId,
+                Email = email,
+                Role = role
+            });
+        }
+    }
+
+    public void Dispose()
+    {
+        _subscription?.Dispose();
+    }
+
+}
