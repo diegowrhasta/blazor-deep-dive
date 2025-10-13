@@ -1,4 +1,13 @@
+@implements IDisposable
+
 @inject IServersEfCoreRepository ServersRepository
+@inject PersistentComponentState ApplicationState
+
+@if (servers.Count <= 0)
+{
+    <p><em>Loading...</em></p>
+    return;
+}
 
 <table class="table table-striped">
     <RepeaterComponent Items="servers">
@@ -35,6 +44,7 @@
     private readonly string FALLBACK_CITY = "Toronto";
     private List<Server> servers = [];
     public Timer? Timer { get; set; }
+    private PersistingComponentStateSubscription? _persistSubscription;
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
@@ -57,20 +67,30 @@
         return Task.CompletedTask;
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        base.OnAfterRender(firstRender);
-        if (!firstRender)
+        if (ApplicationState.TryTakeFromJson<List<Server>?>("Servers", out var restored))
         {
-            return;
+            servers = restored!;
+        }
+        else
+        {
+            await PopulateCitiesAsync();
         }
 
-        Timer = new Timer(_ => { base.InvokeAsync(StateHasChanged); }, state: null, dueTime: 2000, period: 2000);
+        _persistSubscription = ApplicationState.RegisterOnPersisting(PersistData);
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await PopulateCitiesAsync();
+    }
+
+    private Task PersistData()
+    {
+        ApplicationState.PersistAsJson("Servers", servers);
+
+        return Task.CompletedTask;
     }
 
     private async Task PopulateCitiesAsync()
@@ -83,6 +103,11 @@
 
         servers = await ServersRepository.GetServersByCityAsync(CityName ?? FALLBACK_CITY);
         StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        _persistSubscription?.Dispose();
     }
 
 }

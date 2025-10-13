@@ -1,6 +1,8 @@
 @page "/servers"
 @page "/servers/back-from/{previousCityName}"
 
+@* @rendermode @(new InteractiveServerRenderMode(prerender: false)) *@
+
 @inject NavigationManager NavigationManager
 @inject TorontoOnlineServersStore TorontoOnlineServersStore
 @inject IServersEfCoreRepository ServersRepository
